@@ -7,6 +7,7 @@ JPype (https://jpype.readthedocs.io/en/latest/userguide.html#introduction) lets 
 ### Usage
 
 ```
+git clone https://github.com/magefree/mage
 cd mage
 mvn install
 cd ..
