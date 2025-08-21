@@ -2,7 +2,7 @@
 
 ## Testing With JPype
 
-JPype lets you use Java from within Python, thereby simplifying the whole process of interfacing a Python-based AI agent with a Java based game with a Magic: The Gathering rules engine (https://github.com/magefree/mage). In particular, the hope is that it allows one to create a lightweight and headless Gym Environment (https://github.com/openai/gym) for Magic: The Gathering.
+JPype (https://jpype.readthedocs.io/en/latest/userguide.html#introduction) lets you use Java from within Python, thereby simplifying the whole process of interfacing a Python-based AI agent with a Java based game with a Magic: The Gathering rules engine (https://github.com/magefree/mage). In particular, the hope is that it allows one to create a lightweight and headless Gym Environment (https://github.com/openai/gym) for Magic: The Gathering.
 
 ### Usage
 
