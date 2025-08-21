@@ -20,6 +20,33 @@ Name=Test Deck
 
 Many Geyser Drakes.. 
 
+4x rule is now enforced ! (had to mask the actions before taking .argmax()):
+
+```
+[metadata]
+Name=Test Deck
+[Main]
+4 Beastrider Vanguard|DFT
+4 Break Down the Door|DSK
+1 Chandra, Spark Hunter|DFT
+4 Expel the Interlopers|TDC
+4 Friendly Ghost|DSK
+4 Guadosalam, Farplane Gateway|FIN
+1 Heritage Reclamation|TDM
+4 Immersturm Predator|FDN
+4 Inti, Seneschal of the Sun|LCI
+3 Kellan, Planar Trailblazer|FDN
+1 Nightdrinker Moroii|MKM
+4 Pathfinding Axejaw|LCI
+4 Primal Might|FDN
+4 Shocking Sharpshooter|TDM
+1 Sin, Spira's Punishment|FIN
+4 Summon: Primal Odin|FIN
+4 Throne of the Grim Captain // The Grim Captain|LCI
+1 Trade the Helm|DFT
+4 Tyvar, the Pummeler|DSK
+```
+
 ### Usage
 
 ```
