@@ -44,3 +44,5 @@ class Qnet(nn.Module):
         x = self.head_play(x)
         return x
 ```
+
+More on the subtltety: from the perspective of the head_construct, the moment it chooses the last card for the deck it receives a win/loss reward that it is supposed to predict with the Qnet (and it takes win-maximizing actions during deck construction).
