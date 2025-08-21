@@ -19,3 +19,28 @@ Deep Q-learning typically looks like this where Q here would be the >---< networ
 (Image from https://arxiv.org/pdf/1312.5602)
 
 It is suggested that such an approach would yield interesting decks provided the MTG gym environment is sufficiently fast (<1 second for a game with random actions) and the network is sufficiently lightweight (<1 second to perform an action).
+
+An important subtlety is that the win/loss rewards also need to passed to the card pool selection head, so that it may learn.
+
+The skeleton code for >---< might look something like:
+
+```py
+class Qnet(nn.Module):
+    def __init__(self):
+        super(Qnet, self).__init__()
+        self.tail_construct = Block() # acausal transformer block where the sequence is the cards already added to the deck
+        self.tail_play = Block() # acausal transformer block where the sequence is the game objects (e.g. hand 1, hand 2, ..., board 1, board 2, ...)
+        self.shared = nn.Linear()
+        self.head_construct = nn.Linear() # output = a selected card to add to the deck
+        self.head_play = nn.Linear() # output = a selected action to perform next in the game
+    def forward_construct(self, x):
+        x = self.tail_construct(x)
+        x = self.shared(x)
+        x = self.head_construct(x)
+        return x
+    def forward_play(self, x):
+        x = self.tail_play(x)
+        x = self.shared(x)
+        x = self.head_play(x)
+        return x
+```
