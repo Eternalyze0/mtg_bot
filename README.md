@@ -10,11 +10,6 @@ Skeleton code for this is now available (based on https://raw.githubusercontent.
 [metadata]
 Name=Test Deck
 [Main]
-30 Island|TLA|1
-30 Swamp|TLA|1
-[metadata]
-Name=Test Deck
-[Main]
 5 Choco, Seeker of Paradise|FIN
 7 Dion, Bahamut's Dominant // Bahamut, Warden of Light|FIN
 10 Fortress Kin-Guard|TDM
