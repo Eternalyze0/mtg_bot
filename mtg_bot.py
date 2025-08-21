@@ -202,11 +202,7 @@ if __name__ == '__main__':
 	main()
 
 
-# [metadata]
-# Name=Test Deck
-# [Main]
-# 30 Island|TLA|1
-# 30 Swamp|TLA|1
+# % python3.10 mtg_bot.py
 # [metadata]
 # Name=Test Deck
 # [Main]
