@@ -46,3 +46,7 @@ class Qnet(nn.Module):
 ```
 
 More on the subtltety: from the perspective of the head_construct, the moment it chooses the last card for the deck it receives a win/loss reward that it is supposed to predict with (and it takes win-maximizing actions during deck construction).
+
+For those unfamiliar with Q-learning: the Qnet produces Q-values which you can think of as the quality associated with each action. Thus it learns to estimate the quality of possible actions and during inference you just take the max over these qualities to determine the best action.
+
+Another subtlety: actions may be naturally variable length in Magic but you will notice that we use a fixed length head_play output. There's no way around this -- actions have to be capped (say 1000-10000 possible actions) and if the game state is such that there are >10000 targets then the game can be considered invalid and notify the experimenter.
