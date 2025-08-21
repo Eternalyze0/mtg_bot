@@ -97,6 +97,8 @@ class ForgeEnv(gym.Env):
 		pass
 	def close(self):
 		pass
+	def get_4x_mask(self):
+		return np.where(self.state_vector==4, 0, 1)
 
 class ReplayBuffer():
 	def __init__(self):
@@ -177,7 +179,9 @@ def main():
 		done = False
 
 		while not done:
-			a = q.sample_action(torch.from_numpy(s).float(), epsilon)      
+			# a = q.sample_action(torch.from_numpy(s).float(), epsilon)
+			a_dist = q(torch.from_numpy(s).float()) * torch.from_numpy(env.get_4x_mask())
+			a = a_dist.argmax()     
 			s_prime, r, done, truncated, info = env.step(a)
 			done_mask = 0.0 if done else 1.0
 			memory.put((s,a,r/100.0,s_prime, done_mask))
@@ -202,7 +206,11 @@ if __name__ == '__main__':
 	main()
 
 
-# % python3.10 mtg_bot.py
+# [metadata]
+# Name=Test Deck
+# [Main]
+# 30 Island|TLA|1
+# 30 Swamp|TLA|1
 # [metadata]
 # Name=Test Deck
 # [Main]
