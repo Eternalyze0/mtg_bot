@@ -62,6 +62,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 import numpy as np
+import os
 
 #Hyperparameters
 learning_rate = 0.0005
@@ -201,6 +202,11 @@ def main():
 
 			if done and done2:
 				# RUN FORGE_AI SIMULATION HERE TO COMPUTE REWARDS
+				with open('deck1.dck', 'w') as f:
+					f.write(scryfall_to_forge(env.deck))
+				with open('deck2.dck', 'w') as f:
+					f.write(scryfall_to_forge(env2.deck))
+				# os.system('java -jar forge.jar sim -d deck1.dck deck2.dck -n 1')
 				coin = random.random() # simulate with a coin for now
 				if coin < 0.5:
 					r, r2 = 1, -1
@@ -214,8 +220,8 @@ def main():
 
 			score += np.array([r, r2]).argmax() # should round out to 0.5
 			if done:
-				print(scryfall_to_forge(env.deck))
-				print(scryfall_to_forge(env2.deck))
+				# print(scryfall_to_forge(env.deck))
+				# print(scryfall_to_forge(env2.deck))
 				break
 			
 		if memory.size()>=batch_size:
