@@ -164,19 +164,26 @@ def train(q, q_target, memory, optimizer):
 def main():
 	# env = gym.make('CartPole-v1')
 	env = ForgeEnv()
+	env2 = ForgeEnv()
 	q = Qnet()
+	q2 = Qnet()
 	q_target = Qnet()
 	q_target.load_state_dict(q.state_dict())
+	q2_target = Qnet()
+	q2_target.load_state_dict(q2.state_dict())
 	memory = ReplayBuffer()
 
 	print_interval = 20
 	score = 0.0  
 	optimizer = optim.Adam(q.parameters(), lr=learning_rate)
+	optimizer2 = optim.Adam(q2.parameters(), lr=learning_rate)
 
 	for n_epi in range(1):
 		epsilon = max(0.01, 0.08 - 0.01*(n_epi/200)) #Linear annealing from 8% to 1%
 		s = env.reset()
 		done = False
+		s2 = env2.reset()
+		done2 = False
 
 		while not done:
 			# a = q.sample_action(torch.from_numpy(s).float(), epsilon)
@@ -184,19 +191,41 @@ def main():
 			a = a_dist.argmax()     
 			s_prime, r, done, truncated, info = env.step(a)
 			done_mask = 0.0 if done else 1.0
-			memory.put((s,a,r/100.0,s_prime, done_mask))
-			s = s_prime
 
-			score += r
+
+			a_dist2 = q2(torch.from_numpy(s2).float()) * torch.from_numpy(env2.get_4x_mask())
+			a2 = a_dist2.argmax()     
+			s_prime2, r2, done2, truncated2, info2 = env2.step(a2)
+			done_mask2 = 0.0 if done2 else 1.0
+
+			assert q.fc1.weight[0][0] != q2.fc1.weight[0][0]
+
+			if done and done2:
+				# RUN FORGE_AI SIMULATION HERE TO COMPUTE REWARDS
+				coin = random.random()
+				if coin < 0.5:
+					r, r2 = 1, -1
+				else:
+					r, r2 = -1, 1
+
+			memory.put((s, a, r/100.0, s_prime, done_mask))
+			memory.put((s2, a2, r2/100.0, s_prime2, done_mask2))
+			s = s_prime
+			s2 = s_prime2
+
+			score += np.array([r, r2]).argmax() # should round out to 0.5
 			if done:
 				print(scryfall_to_forge(env.deck))
+				print(scryfall_to_forge(env2.deck))
 				break
 			
 		if memory.size()>=batch_size:
 			train(q, q_target, memory, optimizer)
+			train(q2, q2_target, memory, optimizer2)
 
 		if n_epi%print_interval==0 and n_epi!=0:
 			q_target.load_state_dict(q.state_dict())
+			q2_target.load_state_dict(q2.state_dict())
 			print("n_episode :{}, score : {:.1f}, n_buffer : {}, eps : {:.1f}%".format(
 															n_epi, score/print_interval, memory.size(), epsilon*100))
 			score = 0.0
