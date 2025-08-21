@@ -82,7 +82,6 @@ class ForgeEnv(gym.Env):
 		reward = 0 # if won sim, set to 1, if lost, set to -1
 		if len(self.deck) >= 60:
 			done = True
-			# RUN FORGE SIMULATION HERE
 		else:
 			done = False
 		truncated = False
@@ -202,7 +201,7 @@ def main():
 
 			if done and done2:
 				# RUN FORGE_AI SIMULATION HERE TO COMPUTE REWARDS
-				coin = random.random()
+				coin = random.random() # simulate with a coin for now
 				if coin < 0.5:
 					r, r2 = 1, -1
 				else:
