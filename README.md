@@ -4,7 +4,7 @@
 
 Forge supports headless AI simulations so it may be easier to interface with (https://github.com/Card-Forge/forge/wiki/ai). In principle the construction AI could construct a deck using oracle bulk data from Scryfall (https://scryfall.com/docs/api/bulk-data) and then simulate games using the Forge built in AI while receiving rewards for its win/loss statistics. It's not as interesting an approach as the original proposal (because the information isn't integrated beyond the win/loss reward signal) but as a minimum proof of concept it can show that interesting decks can emerge through reinforcement learning.
 
-Skeleton code for this is now available. What remains to be done is accommodating the max 4x limit of standard and also integrating with Forge simulations to get actual reward signal. That is, right now it just generates random decks:
+Skeleton code for this is now available (based on https://raw.githubusercontent.com/seungeunrho/minimalRL/refs/heads/master/dqn.py). What remains to be done is accommodating the max 4x limit of standard and also integrating with Forge simulations to get actual reward signal. That is, right now it just generates random decks:
 
 ```
 [metadata]
