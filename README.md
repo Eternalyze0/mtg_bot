@@ -16,4 +16,6 @@ Deep Q-learning typically looks like this where Q here would be the >---< networ
 
 <img width="744" height="389" alt="Screenshot 2568-08-21 at 11 04 06" src="https://github.com/user-attachments/assets/eaed3f12-e960-4fec-b902-d8d0939cd69f" />
 
+(Image from https://arxiv.org/pdf/1312.5602)
+
 It is suggested that such an approach would yield interesting decks provided the MTG gym environment is sufficiently fast (<1 second for a game with random actions) and the network is sufficiently lightweight (<1 second to perform an action).
