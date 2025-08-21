@@ -1,5 +1,9 @@
 # Magic: The Gathering Bot
 
+## Simulating Games with Forge and Scryfall
+
+Forge supports headless AI simulations so it may be easier to interface with (https://github.com/Card-Forge/forge/wiki/ai). In principle the construction AI could construct a deck using oracle bulk data from Scryfall (https://scryfall.com/docs/api/bulk-data) and then simulate games using the Forge built in AI while receiving rewards for its win/loss statistics. It's not as interesting an approach as the original proposal (because the information isn't integrated beyond the win/loss reward signal) but as a minimum proof of concept it can show that interesting decks can emerge through reinforcement learning.
+
 ## Testing With JPype
 
 JPype (https://jpype.readthedocs.io/en/latest/userguide.html#introduction) lets you use Java from within Python, thereby simplifying the whole process of interfacing a Python-based AI agent with a Java based game with a Magic: The Gathering rules engine (https://github.com/magefree/mage). In particular, the hope is that it allows one to create a lightweight and headless Gym Environment (https://github.com/openai/gym) for Magic: The Gathering.
