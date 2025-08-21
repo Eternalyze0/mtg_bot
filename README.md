@@ -1,5 +1,20 @@
 # Magic: The Gathering Bot
 
+## Testing With JPype
+
+JPype lets you use Java from within Python, thereby simplifying the whole process of interfacing a Python-based AI agent with a Java based game with a Magic: The Gathering rules engine (https://github.com/magefree/mage). In particular, the hope is that it allows one to create a lightweight and headless Gym Environment (https://github.com/openai/gym) for Magic: The Gathering.
+
+### Usage
+
+```
+cd mage
+mvn install
+cd ..
+python3.10 test.py
+```
+
+## Proposal
+
 A proposal design for a Magic: The Gathering bot that constructs interesting decks.
 
 The agent is to select cards from a pool and then play them against another such agent so as to maximize P(winning).
