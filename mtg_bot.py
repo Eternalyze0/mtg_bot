@@ -16,6 +16,15 @@ basic_land_names = ['Swamp', 'Island', 'Forest', 'Mountain', 'Plains']
 
 # standard_cards = [card for card in cards if card['name'] == 'Gingerbrute' or card['name'] == 'Mountain']
 
+twenty_mountains = [card for card in cards if card['name'] == 'Mountain']
+
+for _ in range(19):
+	twenty_mountains.append(twenty_mountains[0])
+
+print(standard_cards[0]['colors'])
+
+standard_cards = [card for card in standard_cards if card['colors'] == ['R']]
+
 basic_lands = [card for card in cards if card['name'] in basic_land_names]
 
 n_actions = len(standard_cards)
@@ -109,7 +118,8 @@ class ForgeEnv(gym.Env):
 	def __init__(self):
 		super(ForgeEnv, self).__init__()
 		# self.deck = [] #basic_lands.copy()
-		self.deck = copy.deepcopy(basic_lands)
+		# self.deck = copy.deepcopy(basic_lands)
+		self.deck = copy.deepcopy(twenty_mountains)
 		self.state_vector = np.zeros(n_actions)
 		self.basic_lands_vector = np.zeros(n_actions)
 		for i, card in enumerate(standard_cards):
@@ -134,7 +144,8 @@ class ForgeEnv(gym.Env):
 		return state, reward, done, truncated, info
 	def reset(self):
 		# self.deck = [] #basic_lands
-		self.deck = copy.deepcopy(basic_lands)
+		# self.deck = copy.deepcopy(basic_lands)
+		self.deck = copy.deepcopy(twenty_mountains)
 		self.state_vector = np.zeros(n_actions)
 		state = self.state_vector
 		# state = np.concatenate([self.state_vector, np.random.normal(size=self.state_vector.shape)])
@@ -176,8 +187,8 @@ class Qnet(nn.Module):
 	def __init__(self):
 		super(Qnet, self).__init__()
 		self.n_noise = 0 #n_actions
-		self.fc1 = nn.Linear(n_actions + self.n_noise, 128) # state should be the cards cards already in the deck
-		self.fc2 = nn.Linear(128, 1280)
+		self.fc1 = nn.Linear(n_actions + self.n_noise, 1280) # state should be the cards cards already in the deck
+		self.fc2 = nn.Linear(1280, 1280)
 		self.do = nn.Dropout(0.5)
 		self.fc3 = nn.Linear(1280, n_actions)
 		self.fc3b = nn.Linear(1280, n_actions)
@@ -242,7 +253,7 @@ def main():
 
 	assert q.fc1.weight[0][0] != q2.fc1.weight[0][0]
 
-	for n_epi in range(20):
+	for n_epi in range(1000):
 		epsilon = max(0.01, 0.08 - 0.01*(n_epi/200)) #Linear annealing from 8% to 1%
 		s = env.reset()
 		done = False
@@ -251,13 +262,13 @@ def main():
 
 		while not done:
 			# a = q.sample_action(torch.from_numpy(s).float(), epsilon)
-			a_dist = q(torch.from_numpy(s).float(), player=0) # * torch.from_numpy(env.get_4x_mask())
+			a_dist = q(torch.from_numpy(s).float(), player=0) * torch.from_numpy(env.get_4x_mask())
 			a = a_dist.argmax()     
 			s_prime, r, done, truncated, info = env.step(a, player=0)
 			done_mask = 0.0 if done else 1.0
 
 
-			a_dist2 = q2(torch.from_numpy(s2).float(), player=1) # * torch.from_numpy(env2.get_4x_mask())
+			a_dist2 = q2(torch.from_numpy(s2).float(), player=1) * torch.from_numpy(env2.get_4x_mask())
 			a2 = a_dist2.argmax()     
 			s_prime2, r2, done2, truncated2, info2 = env2.step(a2, player=1)
 			done_mask2 = 0.0 if done2 else 1.0
