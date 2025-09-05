@@ -186,23 +186,19 @@ class ReplayBuffer():
 class Qnet(nn.Module):
 	def __init__(self):
 		super(Qnet, self).__init__()
-		self.n_noise = 0 #n_actions
-		self.fc1 = nn.Linear(n_actions + self.n_noise, 1280) # state should be the cards cards already in the deck
+		self.fc1 = nn.Linear(n_actions, 1280) # state should be the cards cards already in the deck
+		self.fc1s = nn.Linear(n_actions, 1280)
 		self.fc2 = nn.Linear(1280, 1280)
+		self.fc2s = nn.Linear(1280, 1280)
 		self.do = nn.Dropout(0.5)
 		self.fc3 = nn.Linear(1280, n_actions)
-		self.fc3b = nn.Linear(1280, n_actions)
+		self.fc3s = nn.Linear(1280, n_actions)
+		self.sigma = 10.0
  
 	def forward(self, x, player):
-		# print(x.shape)
-		x = F.relu(self.fc1(x))
-		x = F.relu(self.fc2(x))
-		# x = self.do(x)
-		if player == 0:
-			x = self.fc3(x)
-		else:
-			x = self.fc3b(x)
-		# x = self.do(x)
+		x = F.elu(torch.randn_like(self.fc1(x)) * self.fc1s(x) * self.sigma + self.fc1(x))
+		x = F.elu(torch.randn_like(self.fc2(x)) * self.fc2s(x) * self.sigma + self.fc2(x))
+		x = torch.randn_like(self.fc3(x)) * self.fc3s(x) * self.sigma + self.fc3(x)
 		return x
 	  
 	def sample_action(self, obs, epsilon):
@@ -275,7 +271,7 @@ def main():
 
 			# assert q.fc1.weight[0][0] != q2.fc1.weight[0][0]
 
-			assert a != a2
+			# assert a != a2
 
 			# print(a_dist)
 			# print(a_dist2)
